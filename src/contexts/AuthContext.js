@@ -1,22 +1,68 @@
-import React from 'react';
-import { useContext } from 'react/cjs/react.production.min';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut,
+    updateProfile
+} from "firebase/auth";
+import React, { useContext, useEffect, useState } from "react";
 import "../firebase";
 
 const AuthContext = React.createContext();
-//useAuth is a custom hook
-//ei custom hook provider er vitor ja value dibo oigula peye jabe eta call korle
-export function useAuth() { //component akhon useauth use korle use context er value peye jabe 
-    //bar bar alada alada component e use context import export kora lgbe na
-    //akhon use context use korle authcontext auto peye jbe
+
+export function useAuth() {
     return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }) { //auth provider diea jesob component k amara rap korbo oigula ke amra child hisebe pabo
+export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState();
 
-    //signup function
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+            setLoading(false);
+        });
 
+        return unsubscribe;
+    }, []);
+
+    // signup function
+    async function signup(email, password, username) {
+        const auth = getAuth();
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        // update profile
+        await updateProfile(auth.currentUser, {
+            displayName: username,
+        });
+
+        const user = auth.currentUser;
+        setCurrentUser({
+            ...user,
+        });
+    }
+
+    // login function
+    function login(email, password) {
+        const auth = getAuth();
+        return signInWithEmailAndPassword(auth, email, password);
+    }
+
+    // logout function
+    function logout() {
+        const auth = getAuth();
+        return signOut(auth);
+    }
+
+    const value = {
+        currentUser,
+        signup,
+        login,
+        logout,
+    };
 
     return (
         <AuthContext.Provider value={value}>
