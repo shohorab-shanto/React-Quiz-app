@@ -3,7 +3,8 @@ import useVideoList from '../hooks/useVideoList';
 import classes from "../styles/Videos.module.css";
 import Video from "./Video";
 export default function Videos() {
-    const { loading, error, videos } = useVideoList();
+    const { loading, error, videos } = useVideoList(0);
+    // const [page, setPage] = useState(1);
     return (
         <div className={classes.videos}>
             {videos.length > 0 &&

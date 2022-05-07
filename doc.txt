@@ -1,0 +1,3 @@
+npm install --save react-infinite-scroll-component   //for infinity scroll
+
+//install firebase
