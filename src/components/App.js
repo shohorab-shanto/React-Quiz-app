@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from '../contexts/AuthContext';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "../contexts/AuthContext";
 import "../styles/App.css";
 import Layout from "./Layout";
 import Home from "./pages/Home";
@@ -17,13 +17,12 @@ function App() {
             <Route exact path="/" element={<Home />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/login" element={<Login />} />
-            <Route exact path="/quiz" element={<Quiz />} />
+            <Route exact path="/quiz/:id" element={<Quiz />} />
             <Route exact path="/result" element={<Result />} />
           </Routes>
         </Layout>
       </AuthProvider>
     </BrowserRouter>
-
   );
 }
 
